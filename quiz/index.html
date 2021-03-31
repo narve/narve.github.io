@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Påskequiz 2021</title>
+</head>
+<body>
+
+<h1>Påskequiz 2021</h1>
+
+
+<style>
+    th, td {
+        border: 1px solid black;
+    }
+
+    th {
+        text-align: left;
+    }
+</style>
+<table>
+    <tbody>
+    </tbody>
+</table>
+
+
+<script>
+    const questions = [
+        {
+            q: `Hvor spiller Ousmane Dembélé?`,
+            a: ['Barcelona', 'Juventus', 'PSG']
+        },
+        {
+            q: 'Hvilken dato i 2021 står århundrets bryllup?',
+            a: ['10nde juli', '3dje juli', '17nde juli']
+        },
+        {
+            q: 'Hvilket år ble Billy Eilish født?',
+            a: ['2001', '2003', '2005']
+        },
+        {
+            q: 'Hva heter den amerikanske presidenten nå?',
+            a: ['Joe Biden', 'Joseph Robinette', 'Robert Biden',]
+        },
+        {
+            q: 'Hvilken religion har yoga sin opprinnelse fra?',
+            a: ['Hinduisme', 'Buddhisme', 'Islam']
+        },
+        {
+            q: 'Hvem vant Champions League sist?',
+            a: ['Bayern-Munchen', 'Liverpool', 'PSG',]
+        },
+        {
+            q: 'Nærøyfjorden er en del av...',
+            a: ['Sognefjorden', 'Hardangerfjorden', 'Geirangerfjorden']
+        },
+        {
+            q: 'Hvem er kunnskaps- og integreringsminister nå?',
+            a: ['Guri Melby', 'Erna Solberg', 'Silvi Listhaug']
+        },
+        {
+            q: 'Hvor mange mennesker er det i Norge?',
+            a: ['5.3 millioner', '4.9 millioner', '5.1 millioner',]
+        },
+        {
+            q: 'Hvilken sang vant MGP i 2021?',
+            a: ['Fallen Angel', 'Dark Horse', 'Black Sunday']
+        }];
+
+    const letters = 'yzabcdefghijklmnopqrstuvxyz';
+
+    const answer = 'afosneffup';
+
+    const element = document.querySelector('tbody');
+
+    function shuffle(a) {
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
+
+    const alts = (q, i) => {
+        const letterA = answer[i];
+        const letterIndex = letters.indexOf(letterA);
+        const la = [letters[letterIndex], letters[letterIndex+1], letters[letterIndex + 2],];
+
+        const alts = q.a.map( (a,x) => la[x] + ': ' + a);
+        // const alts = shuffle(q.a.slice());
+        return shuffle(alts).map(a => `<td>${a}</td>`).join("");
+    };
+
+    element.innerHTML =
+        questions.map((q, i) => `
+        <tr>
+        <th>${q.q}</th>
+        ${alts(q, i)}
+        </tr>
+        `).join("");
+</script>
+
+
+</body>
+</html>
