@@ -3,27 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <title>Påskequiz 2021</title>
+
+
+    <style>
+        body {
+            background-image: url('easter.webp');
+            background-repeat: no-repeat;
+            background-size: 100%;
+            background-blend-mode: lighten;
+        }
+
+        th, td {
+            border: 1px solid black;
+        }
+
+        th {
+            text-align: left;
+        }
+        p {
+            max-width: 50ch;
+        }
+    </style>
+
+
 </head>
 <body>
 
 <h1>Påskequiz 2021</h1>
 
 
-<style>
-    th, td {
-        border: 1px solid black;
-    }
-
-    th {
-        text-align: left;
-    }
-</style>
 <table>
     <tbody>
     </tbody>
 </table>
 
 
+<p>
+    Instruksjoner: Svar på alle spørsmålene, skriv ned hvilke bokstaver som gjelder.
+    Disse bokstavene er et anagram, altså et ord der bokstavene står i feil rekkefølge.
+    Finn ut hvilket ord det er, så finner dere kanskje noe godt :)
+
+
+</p>
 <script>
     const questions = [
         {
@@ -85,9 +106,13 @@
     const alts = (q, i) => {
         const letterA = answer[i];
         const letterIndex = letters.indexOf(letterA);
-        const la = [letters[letterIndex], letters[letterIndex+1], letters[letterIndex + 2],];
+        const oneOrMinusOne = Math.random() > 0.5 ? -1 : 1;
+        const la = oneOrMinusOne == 1
+        ?  [letters[letterIndex], letters[letterIndex +1], letters[letterIndex + 2],]
+            :  [letters[letterIndex], letters[letterIndex +1], letters[letterIndex -1],];
+        // const la = [letters[letterIndex], letters[letterIndex - oneOrMinusOne], letters[letterIndex + oneOrMinusOne],];
 
-        const alts = q.a.map( (a,x) => la[x] + ': ' + a);
+        const alts = q.a.map((a, x) => la[x] + ': ' + a);
         // const alts = shuffle(q.a.slice());
         return shuffle(alts).map(a => `<td>${a}</td>`).join("");
     };
