@@ -14,8 +14,14 @@ layout: layouts/base.njk
         {% endfor %}
       {% endif %}
     </p>
+    {% if isFuture %}
+      <p class="scheduled-notice" role="note">
+        <strong>Scheduled post.</strong> This post is dated in the future and is hidden from the home page, tag pages, feed, sitemap, and search. The URL itself works so you can share a preview link.
+      </p>
+    {% endif %}
   </header>
-  <div data-pagefind-body>
+  {# Omit data-pagefind-body on scheduled posts so they're not indexed by search. #}
+  <div{% if not isFuture %} data-pagefind-body{% endif %}>
     {{ content | safe }}
   </div>
 </article>

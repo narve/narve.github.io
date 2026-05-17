@@ -3,7 +3,9 @@
   "private": true,
   "scripts": {
     "build": "eleventy && pagefind --site _site",
+    "build:preview": "INCLUDE_FUTURE=1 eleventy && pagefind --site _site",
     "serve": "eleventy --serve",
+    "serve:preview": "INCLUDE_FUTURE=1 eleventy --serve",
     "clean": "rm -rf _site"
   },
   "devDependencies": {

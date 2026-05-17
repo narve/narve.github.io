@@ -36,6 +36,17 @@ Defined in `.eleventy.js` (`extractMetadata`). Adding a new field means:
 
 Prefer existing HTML standards over custom attribute names: OpenGraph (`og:*`), Article schema (`article:*`), Dublin Core, JSON-LD. The point of this design is that the metadata format is the web's, not Eleventy's.
 
+## Scheduled posts
+
+Posts with `date` in the future are treated as scheduled drafts:
+
+- Implemented in `src/posts/posts.11tydata.js` via `eleventyComputed.eleventyExcludeFromCollections` + an `isFuture` flag.
+- The post **is** still built at its permalink (so the URL is shareable). It's just excluded from collections (home, tags, feed, sitemap) and from the Pagefind search index (achieved by conditionally omitting `data-pagefind-body` in `post.njk`).
+- `INCLUDE_FUTURE=1` reverses the exclusion. Used by `npm run serve:preview` / `npm run build:preview`.
+- A weekly cron in `.github/workflows/deploy.yml` re-deploys the site so scheduled posts go live without a manual push.
+
+When adding features that touch collection iteration, remember the future-exclusion already happens upstream — don't re-filter or you'll double-hide.
+
 ## Common tasks
 
 - **New post**: create `src/posts/YYYY-MM-DD-slug.md` (or `.html`). Build to verify URL and tag pages appeared.

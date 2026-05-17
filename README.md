@@ -69,6 +69,23 @@ HTML posts are *complete, valid HTML documents* — open them directly in a brow
 
 The selector is `#blog-content`. If absent, the entire `<body>` is used. The mapping lives in `.eleventy.js`.
 
+## Scheduled (future-dated) posts
+
+Set a post's `date` in the future and it becomes a scheduled draft:
+
+- The HTML is still built at its date-based permalink, so you can share a preview link (the URL works even though the post is hidden everywhere else).
+- It is excluded from the home page, tag pages, Atom feed, sitemap, and search index until the date arrives.
+- The post itself renders a yellow "Scheduled post" notice so you don't forget.
+
+To preview future posts as if they were live, use the preview scripts:
+
+```sh
+npm run serve:preview    # dev server with future posts visible
+npm run build:preview    # one-off build with future posts visible
+```
+
+The deploy workflow runs on every push **and** weekly (Mondays 06:00 UTC) so a scheduled post goes live automatically once its date passes, even without a code change.
+
 ## Project layout
 
 ```

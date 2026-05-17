@@ -4,6 +4,10 @@ on:
   push:
     branches: [master]
   workflow_dispatch:
+  # Weekly rebuild so future-dated ("scheduled") posts go live automatically
+  # on their date even without a code push. Mondays at 06:00 UTC.
+  schedule:
+    - cron: "0 6 * * 1"
 
 permissions:
   contents: read
