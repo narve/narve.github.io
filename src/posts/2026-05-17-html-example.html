@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HTML example post</title>
+  <meta name="description" content="Demonstrates the <meta>-driven HTML post pipeline.">
+  <meta property="article:published_time" content="2026-05-17T10:30:00+02:00">
+  <meta property="article:tag" content="demo">
+  <meta property="article:tag" content="html">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    /* Standalone-only chrome. Hidden once Eleventy extracts #blog-content. */
+    .standalone-chrome { color: #888; font-size: 0.875rem; }
+  </style>
+</head>
+<body>
+  <header class="standalone-chrome">
+    <p>(You're viewing this HTML file directly. The blog version drops this header.)</p>
+  </header>
+
+  <article id="blog-content">
+    <p>This is a fully standalone HTML page. Open it directly in a browser and it works as a complete document.</p>
+
+    <p>When Eleventy builds the site, the custom <code>.html</code> extension:</p>
+    <ol>
+      <li>Reads <code>&lt;title&gt;</code>, <code>&lt;meta name="description"&gt;</code>, <code>&lt;meta property="article:published_time"&gt;</code>, and all <code>&lt;meta property="article:tag"&gt;</code> entries as front matter.</li>
+      <li>Extracts the inner HTML of <code>#blog-content</code> as the post body.</li>
+      <li>Wraps it in the site layout — so you also see the site header, footer, and styling at the published URL.</li>
+    </ol>
+
+    <p>Everything outside <code>#blog-content</code> is invisible to the SSG.</p>
+  </article>
+
+  <footer class="standalone-chrome">
+    <p>(End of standalone view.)</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,17 @@
+---
+layout: layouts/base.njk
+title: Search
+permalink: /search/
+---
+<h1>Search</h1>
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+<div id="search"></div>
+<script src="/pagefind/pagefind-ui.js"></script>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    new PagefindUI({ element: "#search", showSubResults: true });
+  });
+</script>
+<noscript>
+  <p>Search requires JavaScript. Browse <a href="/tags/">by tag</a> instead.</p>
+</noscript>

@@ -1,0 +1,22 @@
+---
+layout: layouts/base.njk
+---
+<article class="post">
+  <header>
+    <h1>{{ title }}</h1>
+    <p class="meta">
+      <time datetime="{{ page.date | htmlDateString }}">{{ page.date | readableDate }}</time>
+      {% set realTags = tags | filterTagList %}
+      {% if realTags | length %}
+        ·
+        {% for tag in realTags %}
+          <a href="/tags/{{ tag | slugify }}/">#{{ tag }}</a>{% if not loop.last %} {% endif %}
+        {% endfor %}
+      {% endif %}
+    </p>
+  </header>
+  <div data-pagefind-body>
+    {{ content | safe }}
+  </div>
+</article>
+<p><a href="/">← all posts</a></p>
