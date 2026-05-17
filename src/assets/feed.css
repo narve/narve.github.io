@@ -1,0 +1,107 @@
+/*
+ * Pure-CSS fallback for /feed.xml, used when the browser ignores the XSLT
+ * stylesheet (e.g. Chrome 158+ after XSLT removal).
+ *
+ * Limitation: CSS cannot make <atom:link> elements clickable. We surface the
+ * URL as visible text via `content: attr(href)` so a reader can copy-paste,
+ * but it isn't a real hyperlink. For navigation, point people at the home
+ * page via the banner.
+ */
+
+@namespace url(http://www.w3.org/2005/Atom);
+
+/* Body of the XML document is <feed> itself. Page-level styling goes there. */
+feed {
+  display: block;
+  font: 1rem/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  color: #1a1a1a;
+  background: #fdfdfc;
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+/* "This is a web feed" banner, mirroring the XSL version's box. */
+feed::before {
+  content: "This is a web feed. Paste this page's URL into a feed reader (NetNewsWire, Feedly, Miniflux, …) or visit narve.github.io directly.";
+  display: block;
+  background: #fffbe6;
+  border: 1px solid #f0d97a;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+/* Feed title — the big heading. */
+feed > title {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 0.25rem;
+}
+
+/* Feed subtitle. */
+feed > subtitle {
+  display: block;
+  color: #6b6b6b;
+  margin-bottom: 2rem;
+}
+
+/* Hide top-level feed metadata that's only useful to machines. */
+feed > id,
+feed > link,
+feed > updated,
+feed > author {
+  display: none;
+}
+
+/* Each entry becomes a card-ish block. */
+entry {
+  display: block;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e5e5e2;
+}
+
+/* Entry title, rendered like an h2. Cannot be a real link in pure CSS. */
+entry > title {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+  color: #1a1a1a;
+}
+
+/* Date. <updated> is ISO-8601 text — shown as-is. */
+entry > updated {
+  display: block;
+  color: #6b6b6b;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Summary text. */
+entry > summary {
+  display: block;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+/* The post URL: surfaced as readable text via attr(href). */
+entry > link {
+  display: block;
+  font-size: 0.875rem;
+  word-break: break-all;
+}
+entry > link::before {
+  content: "→ " attr(href);
+  color: #2a6df4;
+}
+
+/* Hide entry internals we don't want to show. */
+entry > id,
+entry > content,
+entry > author {
+  display: none;
+}
