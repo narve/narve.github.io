@@ -1,39 +1,379 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
-    <title>Narve Sætre</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Narve Sætre</title>
+  <meta name="description" content="Projects and experiments by Narve Sætre: AI-generated games, surveillance art, puzzle tools and web libraries.">
+  <meta name="color-scheme" content="dark light">
 
-    <!-- Basic visitor tracking - privacy-friendly, GDPR-compliant, European -->
-    <script>
-        window.goatcounter = {
-            path: function(p) { return location.host + p }
-        }
-    </script>
-    <script data-goatcounter="https://dv8.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <!-- Basic visitor tracking - privacy-friendly, GDPR-compliant, European -->
+  <script>
+    window.goatcounter = {
+      path: function(p) { return location.host + p }
+    }
+  </script>
+  <script data-goatcounter="https://dv8.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <style>
-        body {
-            display: flex;
-            max-width: 40em;
-            margin: auto;
-        }
-    </style>
+  <style>
+    :root {
+      --bg: #07090d;
+      --bg-card: rgba(18, 24, 33, 0.72);
+      --line: rgba(120, 200, 230, 0.12);
+      --line-strong: rgba(120, 200, 230, 0.32);
+      --text: #d6dde6;
+      --muted: #7d8a99;
+      --accent: #6fd6e8;
+      --accent-2: #b59cff;
+      --grid: rgba(111, 214, 232, 0.045);
+      --glow: rgba(111, 214, 232, 0.08);
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f3f5f8;
+        --bg-card: rgba(255, 255, 255, 0.78);
+        --line: rgba(20, 70, 100, 0.12);
+        --line-strong: rgba(20, 110, 140, 0.35);
+        --text: #18202b;
+        --muted: #5b6776;
+        --accent: #0b7f95;
+        --accent-2: #6a4fd1;
+        --grid: rgba(11, 127, 149, 0.06);
+        --glow: rgba(11, 127, 149, 0.07);
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    html { background: var(--bg); }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font: 400 16px/1.6 "Space Grotesk", system-ui, sans-serif;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, var(--glow), transparent 70%),
+        linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 40px 40px,
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 40px 40px,
+        var(--bg);
+      background-attachment: fixed;
+    }
+
+    .wrap {
+      max-width: 60rem;
+      margin: 0 auto;
+      padding: 4.5rem 1rem 3rem;
+    }
+
+    .mono {
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    header { margin-bottom: 3.5rem; }
+
+    header .mono::before {
+      content: "";
+      display: inline-block;
+      width: 0.5em;
+      height: 0.5em;
+      margin-right: 0.6em;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      vertical-align: 0.08em;
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse { 50% { opacity: 0.35; } }
+
+    h1 {
+      margin: 0.6rem 0 0.8rem;
+      font-size: clamp(2.2rem, 6vw, 3.4rem);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+    }
+
+    h1 span {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    header p {
+      max-width: 36rem;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    a { color: inherit; }
+
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 0 0 1.25rem;
+      font-weight: 400;
+    }
+    h2::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--line-strong), transparent);
+    }
+
+    section + section { margin-top: 3.5rem; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem 1.25rem 1.1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      backdrop-filter: blur(6px);
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .card:hover {
+      border-color: var(--line-strong);
+      transform: translateY(-2px);
+    }
+    /* corner brackets */
+    .card::before, .card::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border: 1px solid var(--accent);
+      opacity: 0.5;
+      transition: opacity 0.25s;
+    }
+    .card::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; border-top-left-radius: 6px; }
+    .card::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; border-bottom-right-radius: 6px; }
+    .card:hover::before, .card:hover::after { opacity: 1; }
+
+    .card.featured {
+      grid-column: 1 / -1;
+      padding: 1.75rem;
+      border-color: var(--line-strong);
+    }
+    .card.featured h3 { font-size: 1.6rem; }
+    .card.featured p { font-size: 1.05rem; max-width: 42rem; }
+
+    .card h3 {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .card p {
+      flex: 1;
+      margin: 0 0 1.1rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .meta { display: flex; gap: 0.75rem; }
+    .meta .lang { color: var(--accent-2); }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .links a {
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 0.78rem;
+      text-decoration: none;
+      padding: 0.3rem 0.65rem;
+      border: 1px solid var(--line-strong);
+      border-radius: 3px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .links a:hover, .links a:focus-visible {
+      background: var(--accent);
+      color: var(--bg);
+      outline: none;
+    }
+    .links a.live { border-color: var(--accent); color: var(--accent); }
+    .links a.live:hover, .links a.live:focus-visible { color: var(--bg); }
+
+    .archive {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid var(--line);
+    }
+    .archive li {
+      display: grid;
+      grid-template-columns: 12rem 1fr auto;
+      gap: 1rem;
+      align-items: baseline;
+      padding: 0.75rem 0.25rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .archive a { text-decoration: none; font-weight: 500; }
+    .archive a:hover { color: var(--accent); }
+    .archive .desc { color: var(--muted); font-size: 0.92rem; }
+    .archive .desc a { font-weight: 400; text-decoration: underline; }
+
+    footer {
+      margin-top: 4rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    footer a { text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    @media (max-width: 40rem) {
+      .wrap { padding-top: 3rem; }
+      .card.featured { padding: 1.25rem; }
+      .archive li { grid-template-columns: 1fr; gap: 0.15rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
 </head>
 <body>
-<main>
-    <header>
-        <h3>Narve's GitHub page</h3>
-    </header>
-    <p>
-        Welcome! There's not much to see here, but you can check out
-        my (public) projects on <a href="https://github.com/narve">my GitHub profile</a>.
-    </p>
-    <p>
-        My latest public project is <a href="https://narve.github.io/the-presenter/">The Presenter</a>.
-    </p>
-</main>
+<div class="wrap">
 
+  <header>
+    <div class="mono">narve.github.io</div>
+    <h1>Narve <span>Sætre</span></h1>
+    <p>Developer at <a href="https://dv8.no">DV8</a>. Here are some public projects: AI experiments, small tools for the browser, and a few older libraries.</p>
+  </header>
+
+  <main>
+    <section>
+      <h2 class="mono">Projects</h2>
+      <div class="grid">
+
+        <article class="card featured">
+          <div class="meta mono"><span class="lang">TypeScript</span><span>AI · Game</span></div>
+          <h3>AnyWorld</h3>
+          <p>A turn-based roguelike where every run is a different game. An AI invents the world (genre, characters, rules and goal) and then acts as a live game master, while a deterministic engine keeps it playable and fair. The game itself was built autonomously by Claude agents.</p>
+          <div class="links">
+            <a href="https://github.com/narve/any-world">repo</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="meta mono"><span class="lang">JavaScript</span><span>AI · Art</span></div>
+          <h3>Artful Dodger</h3>
+          <p>Surveillance art. A webcam captures the room, a local LLM writes live descriptions of what it sees, and a sci-fi monitor displays them with a typewriter effect.</p>
+          <div class="links">
+            <a href="https://github.com/narve/artful-dodger">repo</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="meta mono"><span class="lang">JavaScript</span><span>Puzzle</span></div>
+          <h3>Matchstick Puzzle Solver</h3>
+          <p>Type or click a matchstick equation, see whether it holds, and get every one-stick move that fixes it. Includes strict, default and flexible rule sets.</p>
+          <div class="links">
+            <a class="live" href="https://sticks.dv8.no">live ↗</a>
+            <a href="https://github.com/narve/matchstick-puzzle-solver">repo</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="meta mono"><span class="lang">TypeScript</span><span>Accessibility</span></div>
+          <h3>Text Size Adjuster</h3>
+          <p>Make a page's text bigger or smaller with one tap, without zooming the whole page or scrolling sideways. Available as a Firefox extension, a userscript, or a script tag for site owners.</p>
+          <div class="links">
+            <a class="live" href="https://narve.github.io/text-size-adjuster/">live ↗</a>
+            <a href="https://github.com/narve/text-size-adjuster">repo</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="meta mono"><span class="lang">JavaScript</span><span>Presentations</span></div>
+          <h3>The Presenter</h3>
+          <p>Turn existing HTML or Markdown into a web presentation using any of several presentation frameworks, or just add a "Present" button. No server and no build step.</p>
+          <div class="links">
+            <a class="live" href="https://narve.github.io/the-presenter/">live ↗</a>
+            <a href="https://github.com/narve/the-presenter">repo</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="meta mono"><span class="lang">TypeScript</span><span>AI · Workshop</span></div>
+          <h3>Booking Demo</h3>
+          <p>A full-stack React/Express/SQLite rental app built as a showcase for multi-agent development across Claude Code, Copilot and OpenCode. Used in courses and workshops.</p>
+          <div class="links">
+            <a class="live" href="https://narve.github.io/ai-development-workshop/">workshop ↗</a>
+            <a href="https://github.com/narve/booking-demo">repo</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="meta mono"><span class="lang">C#</span><span>Library</span></div>
+          <h3>DV8.Html</h3>
+          <p>A simple, dependency-free C# DSL for building HTML elements, with support for serializing object graphs to HTML.</p>
+          <div class="links">
+            <a href="https://github.com/narve/DV8.Html">repo</a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section>
+      <h2 class="mono">Older</h2>
+      <ul class="archive">
+        <li>
+          <a href="https://github.com/narve/angular-bpmn">angular-bpmn</a>
+          <span class="desc">Sample project integrating Angular with the BPMN-JS diagram editor.</span>
+          <span class="mono">TS</span>
+        </li>
+        <li>
+          <a href="https://github.com/narve/ang2-bpmnjs">ang2-bpmnjs</a>
+          <span class="desc">The original Angular 2 + BPMN-JS sample, with a properties panel and custom palette.</span>
+          <span class="mono">TS</span>
+        </li>
+        <li>
+          <a href="https://github.com/narve/xhtml-generator">xhtml-generator</a>
+          <span class="desc">Fluent, dependency-free Java 8 library for generating well-formed XHTML.</span>
+          <span class="mono">Java</span>
+        </li>
+        <li>
+          <a href="https://narve.github.io/lectures/java8-lambdas/">lectures</a>
+          <span class="desc">Lecture slides on Java 8 lambdas (<a href="https://github.com/narve/lectures">repo</a>).</span>
+          <span class="mono">Java</span>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="mono">
+    <span>© Narve Sætre</span>
+    <a href="https://github.com/narve">github.com/narve ↗</a>
+  </footer>
+
+</div>
 </body>
+</html>
